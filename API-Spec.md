@@ -10,7 +10,7 @@ Create a Todo
 
 URL: `POST/ToDos/`
 
-Request Body: 
+Request Body:
 ```json
 {
     "name": String
