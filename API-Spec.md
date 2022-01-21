@@ -6,20 +6,23 @@ This is a blueprint of the ToDo API. The API showcases POST, GET, PUT, DEL
 ---
 
 ### Create ToDo's [POST]
-`POST/ToDos/`
-request body: 
-```
+Create a Todo
+
+URL: `POST/ToDos/`
+
+Request Body: 
+```json
 {
     "name": String
     "dueDate": date
     "status": bool
 }
 ```
-response body:
+Response Body:
 
-`response code: 201`
+Response Code: `201 CREATED`
 
-```
+```json
 {   
     "id": int
     "name": String
@@ -29,12 +32,15 @@ response body:
 ```
 
 ### Fetch all ToDo's [GET]
-`GET/ToDos/`
-response body:
+Get every ToDo
 
-`response code: 200`
+URL: `GET/ToDos/`
 
-```
+Response Body:
+
+Response Code: `200 OK`
+
+```json
 [
     {
         "id": int
@@ -46,12 +52,15 @@ response body:
 ```
 
 ### Fetch a ToDo [GET]
-`GET/ToDos/{id}/`
-response body:
+Get a single ToDo
 
-`response code: 200`
+URL: `GET/ToDos/{id}/`
 
-``` 
+Response Body:
+
+Response Code: `200 OK`
+
+```json
 {
     "id": int
     "name": String
@@ -61,9 +70,12 @@ response body:
 ```
 
 ### Update a ToDo [PUT]
-`PUT/ToDos/{id}/`
-request body:
-```
+Update an existing ToDo
+
+URL: `PUT/ToDos/{id}/`
+
+Request Body:
+```json
 {
     "id": int
     "name": String
@@ -72,9 +84,9 @@ request body:
 }
 ```
 
-`response code: 200`
+Response Code: `200 OK`
 
-```
+```json
 {
     "id": int
     "name": String
@@ -84,6 +96,10 @@ request body:
 ```
 
 ### Delete a ToDo [DEL]
-`DEL/Todos/{id}/`
-response body:
-`response code: 200`
+Delete an existing ToDo
+
+URL: `DEL/Todos/{id}/`
+
+Response Body: {}
+
+Response Code: `200 OK`
