@@ -94,7 +94,6 @@ Response Code: `200 OK`
     "status": bool
 }
 ```
-
 ### Delete a ToDo [DEL]
 Delete an existing ToDo
 
