@@ -8,7 +8,7 @@ This is a blueprint of the ToDo API. The API showcases POST, GET, PUT, DEL
 ### Create ToDo's [POST]
 Create a Todo
 
-URL: `POST/ToDos/`
+POST: `/ToDos`
 
 Request Body:
 ```json
@@ -34,7 +34,7 @@ Response Code: `201 CREATED`
 ### Fetch all ToDo's [GET]
 Get every ToDo
 
-URL: `GET/ToDos/`
+GET: `/ToDos`
 
 Response Body:
 
@@ -47,14 +47,15 @@ Response Code: `200 OK`
         "name": String
         "dueDate": date
         "status": bool
-    }
-] ...
+    },
+    ...
+]
 ```
 
 ### Fetch a ToDo [GET]
 Get a single ToDo
 
-URL: `GET/ToDos/{id}/`
+GET: `ToDos/{id}`
 
 Response Body:
 
@@ -72,7 +73,7 @@ Response Code: `200 OK`
 ### Update a ToDo [PUT]
 Update an existing ToDo
 
-URL: `PUT/ToDos/{id}/`
+PUT: `ToDos/{id}`
 
 Request Body:
 ```json
@@ -97,8 +98,6 @@ Response Code: `200 OK`
 ### Delete a ToDo [DEL]
 Delete an existing ToDo
 
-URL: `DEL/Todos/{id}/`
-
-Response Body: {}
+DEL: `Todos/{id}`
 
 Response Code: `200 OK`
