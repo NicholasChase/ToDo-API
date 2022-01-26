@@ -98,6 +98,6 @@ Response Code: `200 OK`
 ### Delete a ToDo [DEL]
 Delete an existing ToDo
 
-DEL: `todos/{id}`
+DEL: `toDos/{id}`
 
 Response Code: `200 OK`
