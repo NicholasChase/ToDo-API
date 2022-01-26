@@ -14,7 +14,7 @@ Request Body:
 ```json
 {
     "name": String
-    "dueDate": date
+    "dueDate": Date
     "status": bool
 }
 ```
@@ -26,7 +26,7 @@ Response Code: `201 CREATED`
 {   
     "id": int
     "name": String
-    "dueDate": date
+    "dueDate": Date
     "status": bool
 }
 ```
@@ -45,7 +45,81 @@ Response Code: `200 OK`
     {
         "id": int
         "name": String
-        "dueDate": date
+        "dueDate": Date
+        "status": bool
+    },
+    ...
+]
+```
+
+### Sort ToDo's by Dates [GET]
+Filter the todos by the dates
+
+GET: `/toDos?sort[dueDates]`
+
+Response Body:
+
+Response Code: `200 OK`
+
+```json 
+[
+    {
+        "id": int
+        "name": String
+        "dueDate": Date
+        "status": bool
+    },
+    ...
+]
+```
+
+### Filter By Completed And Sort By Due Date [GET]
+Grab the Todo's that are completed
+
+GET: `/toDos?filter[status]=True,toDos?sort[dueDates]`
+
+parameters:
+    -in: path
+    status: True
+    sortBy: dates
+
+Response Body:
+
+Response Code: `200 OK`
+
+```json
+[
+    {
+        "id": int
+        "name": String
+        "dueDate": Date
+        "status": bool
+    },
+    ...
+]
+```
+
+### Filter By Incomplete and Sort By Due Date [GET]
+Grab the Todo's that are incomplete
+
+GET: `/toDos?filter[status]=False,toDos?sort[dueDates]`
+
+parameters:
+    -in: path
+    status: False
+    sortBy: dates
+
+
+Response Body:
+
+Response Code: `200 OK`
+
+```json
+[
+    {
+        "id": int
+        "name": String
+        "dueDate": Date
         "status": bool
     },
     ...
@@ -65,7 +139,7 @@ Response Code: `200 OK`
 {
     "id": int
     "name": String
-    "dueDate": date
+    "dueDate": Date
     "status": bool
 }
 ```
@@ -80,7 +154,7 @@ Request Body:
 {
     "id": int
     "name": String
-    "dueDate": date
+    "dueDate": Date
     "status": bool
 }
 ```
@@ -91,13 +165,13 @@ Response Code: `200 OK`
 {
     "id": int
     "name": String
-    "dueDate": date
+    "dueDate": Date
     "status": bool
 }
 ```
 ### Delete a ToDo [DEL]
 Delete an existing ToDo
 
-DEL: `todos/{id}`
+DEL: `toDos/{id}`
 
 Response Code: `200 OK`
