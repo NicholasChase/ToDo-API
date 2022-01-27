@@ -23,6 +23,7 @@ ExpressJS is a back end web application framework for Node.js used by many popul
 ### Pros Using ExpressJS
 * Effective Error Handling
 * Easy Instalation
+* Build web applications quickly and easily
 * Good for Single-Page apps
 * High test coverage
 * Robust routing
@@ -42,15 +43,6 @@ ExpressJS is a back end web application framework for Node.js used by many popul
 
 ### ExpressJS Speed Test
 In a benchmark speed test that tested a Hello World example, ExpressJS processed `12,268` requests per second.
-
-### ExpressJS Hello World Example (Proof of Concept)
-const express = require('express');
-const app = express();
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 ### Documentation/Resources For ExpressJS
 * https://expressjs.com/
@@ -123,14 +115,25 @@ Sails.js is a popular MVC framework for Node.js. Sails.js has support for the re
 * Leidos
 * Philips
 
-### Sails.js Hello World Example (Prood of Concept)
-
-
 ### Documentation/Resources For Sails.js
 * https://sailsjs.com/
 * https://medium.com/@josephdlawson21/intro-to-sails-js-99a2016bf37d
 
 ---
+
+# The Tech Stack
+
+### Framework
+Based on the proof of concepts I have concluded that I will be using the ExpressJS framework. ExpressJS is the foundation for many other frameworks thus I believe it is in my best interest to start learning ExpressJS. Good for small projects as well as large projects. Express has robust routing. 
+
+### Useful Programs
+* Postman
+* Database couchDB (BANNED: MongoDB) but if we aren't using databases express can do server-side Caching (temporarily)
+* Client-side front-end: HTML/CSS, Bootstrap(Maybe)
+
+* ORM: 
+
+  ---
 
 ##### Sources
 
