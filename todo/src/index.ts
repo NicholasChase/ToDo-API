@@ -1,3 +1,4 @@
+/*
 import { Server, Request, ResponseToolkit } from "@hapi/hapi";
 const init = async () => {
     const server: Server = new Server({
@@ -19,3 +20,5 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 init();
+
+*/
