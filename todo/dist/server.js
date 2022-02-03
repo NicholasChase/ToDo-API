@@ -11,20 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = exports.server = void 0;
 const hapi_1 = require("@hapi/hapi");
-const routes_1 = require("./routes");
+const routes_1 = require("./routes/routes");
 const init = () => __awaiter(void 0, void 0, void 0, function* () {
     exports.server = new hapi_1.Server({
         port: 5000,
         host: 'localhost'
     });
     (0, routes_1.getRoute)();
-    // server.route({
-    //     method: 'GET',
-    //     path: '/',
-    //     handler: (request: Request, h: ResponseToolkit) => {
-    //         return 'Hello World!';
-    //     }
-    // });
     yield exports.server.start();
     console.log(`Running on ${exports.server.info.uri}`);
 });

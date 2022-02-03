@@ -1,7 +1,7 @@
 'use strict';
 
 import { Server, ResponseToolkit } from "@hapi/hapi";
-import { getRoute } from "./routes";
+import { getRoute } from "./routes/routes";
 
 
 export let server: Server;
@@ -13,14 +13,6 @@ export const init = async () => {
     });
 
     getRoute();
-
-    // server.route({
-    //     method: 'GET',
-    //     path: '/',
-    //     handler: (request: Request, h: ResponseToolkit) => {
-    //         return 'Hello World!';
-    //     }
-    // });
 
     await server.start();
     console.log(`Running on ${server.info.uri}`);
