@@ -1,19 +1,22 @@
-import { server } from "../server"
-import { ResponseToolkit, Request } from "@hapi/hapi"
+import { server } from "../server";
+import { Request } from "@hapi/hapi";
 import { tasks } from "../models";
+import { stringToDate } from "../Helpers/helpers";
 
 export function putRoute() {
     // PUT update a Task
     server.route({
         method: 'PUT',
         path: '/task/{id}',
-        handler:(request: Request, h: ResponseToolkit) => {
+        handler:(request: Request) => {
 
             const found = tasks.find(task => task.id === parseInt(request.params.id));
             if(found) {
-                // const updateTask = tasks.find((task) => task.id === parseInt(id) )
+
+                let date = stringToDate(request.payload['dueDate']);
+
                 found.todo = request.payload['todo'];
-                found.dueDate = request.payload['dueDate'];
+                found.dueDate = date;
                 found.complete = request.payload['completed'];
 
                 return found

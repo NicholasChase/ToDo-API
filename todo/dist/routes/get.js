@@ -3,12 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRoutes = void 0;
 const server_1 = require("../server");
 const models_1 = require("../models");
+const helpers_1 = require("../Helpers/helpers");
 function getRoutes() {
     // GET all Tasks
     server_1.server.route({
         method: 'GET',
         path: '/task',
-        handler: (request, h) => {
+        handler: () => {
             return models_1.tasks;
         }
     });
@@ -16,7 +17,7 @@ function getRoutes() {
     server_1.server.route({
         method: 'GET',
         path: '/task/completed',
-        handler: (request, h) => {
+        handler: () => {
             const found = models_1.tasks.some(task => true === task.complete);
             if (found) {
                 return (models_1.tasks.filter(task => true === task.complete));
@@ -30,7 +31,7 @@ function getRoutes() {
     server_1.server.route({
         method: 'GET',
         path: '/task/incomplete',
-        handler: (request, h) => {
+        handler: () => {
             const found = models_1.tasks.some(task => false === task.complete);
             if (found) {
                 return (models_1.tasks.filter(task => false === task.complete));
@@ -44,9 +45,17 @@ function getRoutes() {
     server_1.server.route({
         method: 'GET',
         path: '/task/sorted',
-        handler: (request, h) => {
-            var sortedTasks = models_1.tasks;
-            sortedTasks.sort((task1, task2) => task1.id - task2.id);
+        handler: () => {
+            var sortedTasks = (0, helpers_1.numericalOrder)();
+            return sortedTasks;
+        }
+    });
+    // Sorting the Dates
+    server_1.server.route({
+        method: 'GET',
+        path: '/task/dateSorted',
+        handler: () => {
+            var sortedTasks = (0, helpers_1.dateOrder)();
             return sortedTasks;
         }
     });
@@ -54,9 +63,7 @@ function getRoutes() {
     server_1.server.route({
         method: 'GET',
         path: '/task/{id}',
-        handler: (request, h) => {
-            console.log(request.params);
-            console.log(request.params.id);
+        handler: (request) => {
             const found = models_1.tasks.some(task => task.id === parseInt(request.params.id));
             if (found) {
                 return (models_1.tasks.filter(task => task.id === parseInt(request.params.id)));

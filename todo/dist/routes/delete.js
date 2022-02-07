@@ -8,14 +8,13 @@ function delRoute() {
     server_1.server.route({
         method: 'DELETE',
         path: '/task/{id}',
-        handler: (request, h) => {
+        handler: (request) => {
             const found = models_1.tasks.some(task => task.id === parseInt(request.params.id));
             if (found) {
                 models_1.tasks.forEach(task => {
                     if (task.id === parseInt(request.params.id)) {
                         let i = parseInt(request.params.id);
-                        // console.log(tasks.splice[request.params.id]);
-                        models_1.tasks.splice(i - 1, 1);
+                        models_1.tasks.splice(i, 1);
                     }
                 });
                 return (models_1.tasks.filter(task => task.id !== parseInt(request.params.id)));

@@ -1,5 +1,5 @@
 import { server } from "../server"
-import { ResponseToolkit, Request } from "@hapi/hapi"
+import { Request } from "@hapi/hapi"
 import { tasks } from "../models";
 
 export function delRoute() {
@@ -7,14 +7,13 @@ export function delRoute() {
     server.route({
         method: 'DELETE',
         path: '/task/{id}',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: (request: Request) => {
             const found = tasks.some(task => task.id === parseInt(request.params.id));
             if(found) {
                 tasks.forEach(task => {
                     if (task.id === parseInt(request.params.id)) {
                         let i = parseInt(request.params.id)
-                        // console.log(tasks.splice[request.params.id]);
-                        tasks.splice(i-1, 1);
+                        tasks.splice(i, 1);
                     }  
                 });
                 return(tasks.filter(task => task.id !== parseInt(request.params.id)));

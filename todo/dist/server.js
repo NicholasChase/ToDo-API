@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = exports.server = void 0;
 const hapi_1 = require("@hapi/hapi");
-//import { getRoute } from "./routes/routes";
 const get_1 = require("./routes/get");
 const post_1 = require("./routes/post");
 const put_1 = require("./routes/put");
