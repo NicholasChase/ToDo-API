@@ -1,6 +1,6 @@
-function getDate() {
-}
 function order() {
+}
+function getDate() {
 }
 function dateToString() {
 }
