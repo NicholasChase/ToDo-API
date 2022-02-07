@@ -1,7 +1,6 @@
 let dueDate1 = "02/02/2022";
 let newDate1 = new Date(dueDate1);
 
-
 let dueDate2 = "01/03/2022";
 let newDate2 = new Date(dueDate2);
 
