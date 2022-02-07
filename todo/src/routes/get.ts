@@ -1,6 +1,7 @@
 import { server } from "../server"
-import { ResponseToolkit, Request } from "@hapi/hapi"
+import { Request } from "@hapi/hapi"
 import { tasks } from "../models";
+import { numericalOrder, dateOrder } from "../Helpers/helpers";
 
 
 export function getRoutes() {
@@ -9,7 +10,7 @@ export function getRoutes() {
     server.route({
         method: 'GET',
         path: '/task',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             return tasks;
         }
     });
@@ -18,7 +19,7 @@ export function getRoutes() {
     server.route({
         method: 'GET',
         path: '/task/completed',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             const found = tasks.some(task => true === task.complete);
             if(found) {
                 return(tasks.filter(task => true === task.complete))
@@ -32,7 +33,7 @@ export function getRoutes() {
     server.route({
         method: 'GET',
         path: '/task/incomplete',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             const found = tasks.some(task => false === task.complete);
             if(found) {
                 return(tasks.filter(task => false === task.complete))
@@ -46,9 +47,18 @@ export function getRoutes() {
     server.route({
         method: 'GET',
         path: '/task/sorted',
-        handler: (request: Request, h: ResponseToolkit) => {
-            var sortedTasks = tasks;
-            sortedTasks.sort((task1, task2) => task1.id - task2.id);
+        handler: () => {
+            var sortedTasks = numericalOrder();
+           return sortedTasks;
+        }
+    });
+
+    // Sorting the Dates
+    server.route({
+        method: 'GET',
+        path: '/task/dateSorted',
+        handler: () => {
+            var sortedTasks = dateOrder();
            return sortedTasks;
         }
     });
@@ -57,7 +67,7 @@ export function getRoutes() {
     server.route({
         method: 'GET',
         path: '/task/{id}',
-        handler:(request: Request, h: ResponseToolkit) => { 
+        handler:(request: Request) => { 
 
             const found = tasks.some(task => task.id === parseInt(request.params.id));
 
