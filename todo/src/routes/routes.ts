@@ -1,5 +1,10 @@
-import { Request } from "@hapi/hapi"
-import { tasks, Task } from "../models";
+
+/*import { server } from "../server"
+import { ResponseToolkit, Request } from "@hapi/hapi"
+import { tasks } from "../models";
+
+export function getRoute() {
+
 
 export const getRoutes = [
     // GET all Tasks
@@ -119,5 +124,11 @@ export const getRoutes = [
                 return (`No task with the ID of ${request.params.id}`)
             }
         }
+
     }
 ]
+
+    })
+}
+*/
+

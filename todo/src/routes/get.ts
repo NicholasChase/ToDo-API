@@ -58,8 +58,6 @@ export function getRoutes() {
         method: 'GET',
         path: '/task/{id}',
         handler:(request: Request, h: ResponseToolkit) => { 
-            console.log(request.params);
-            console.log(request.params.id);
 
             const found = tasks.some(task => task.id === parseInt(request.params.id));
 
