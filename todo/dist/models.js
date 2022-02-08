@@ -2,12 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tasks = void 0;
 const uuid_1 = require("uuid");
-let dueDate1 = "02/02/2022";
-let newDate1 = new Date(dueDate1);
-let dueDate2 = "01/03/2022";
-let newDate2 = new Date(dueDate2);
-let dueDate3 = "07/06/2022";
-let newDate3 = new Date(dueDate3);
+let newDate1 = new Date("02/02/2022 05:00 GMT-0000");
+let newDate2 = new Date("07/06/2022");
+let newDate3 = new Date("01/03/2022");
 let date = new Date();
 exports.tasks = [
     {

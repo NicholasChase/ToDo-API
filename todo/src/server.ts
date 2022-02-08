@@ -1,12 +1,10 @@
 'use strict';
 
-import { Server, ResponseToolkit } from "@hapi/hapi";
-import { getRoutes } from "./routes/get";
-import { postRoute } from "./routes/post";
-import { putRoute } from "./routes/put";
-import { delRoute } from "./routes/delete";
-
-
+import { Server } from "@hapi/hapi";
+import { getRouting } from "./routes/getClass";
+import { delRouting } from "./routes/delClass";
+import { postRouting } from "./routes/postClass";
+import { putRouting } from "./routes/putClass";
 
 export let server: Server;
 
@@ -16,11 +14,16 @@ export const init = async () => {
         host: 'localhost'
     });
 
-    getRoutes();
-    postRoute();
-    putRoute();
-    delRoute();
-    
+    var getRoute = new getRouting;
+    var delRoute = new delRouting;
+    var postRoute = new postRouting;
+    var putRoute = new putRouting;
+
+    getRoute.getClassRoute();
+    delRoute.delClassRoute();
+    postRoute.postClassRoute();
+    putRoute.putClassRoute();
+
     await server.start();
     console.log(`Running on ${server.info.uri}`);
 };

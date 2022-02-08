@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export interface NewTask {
+export interface Task {
     uuid: uuidv4,
     id: number;
     todo: string;
