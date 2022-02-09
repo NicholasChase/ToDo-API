@@ -1,20 +1,18 @@
-import { server } from "../server"
-import { ResponseToolkit, Request } from "@hapi/hapi"
+import { Request } from "@hapi/hapi"
 import { tasks, Task } from "../models";
 
-export function getRoute() {
-
+export const getRoutes = [
     // GET all Tasks
-    server.route({
+    {
         method: 'GET',
         path: '/task',
         handler: () => {
             return tasks;
         }
-    });
+    },
 
     // Only grab the todo that has the completed status of true
-    server.route({
+    {
         method: 'GET',
         path: '/task/completed',
         handler: () => {
@@ -25,10 +23,10 @@ export function getRoute() {
                 return (`No todo is completed`);
             }
         }
-    });
+    },
 
     // Only grab the tasks that have a completed status of false
-    server.route({
+    {
         method: 'GET',
         path: '/task/incomplete',
         handler: () => {
@@ -39,10 +37,10 @@ export function getRoute() {
                 return (`No todo is completed`);
             }
         }
-    });
+    },
 
     // Sorting the ID numbers
-    server.route({
+    {
         method: 'GET',
         path: '/task/sorted',
         handler: () => {
@@ -50,10 +48,10 @@ export function getRoute() {
             sortedTasks.sort((task1, task2) => task1.id - task2.id);
            return sortedTasks;
         }
-    });
+    },
 
     // GET a single task
-    server.route({
+    {
         method: 'GET',
         path: '/task/{id}',
         handler:(request: Request) => { 
@@ -66,15 +64,14 @@ export function getRoute() {
                 return(tasks.filter(task => task.id === parseInt(request.params.id)));
             } else {
                 return (`No task with the ID of ${request.params.id}`)
-            }
-            //return JSON.stringify(models[request.params.id]);  
+            } 
         }
-    });
+    },
 
 
 
     // POST a task
-    server.route({
+    {
         method: 'POST',
         path: '/task',
         handler:(request: Request) => {
@@ -83,10 +80,10 @@ export function getRoute() {
             tasks.push(newTodo);
             return newTodo;
         }
-    });
+    },
 
     // DEL a task
-    server.route({
+    {
         method: 'DELETE',
         path: '/task/{id}',
         handler: (request: Request) => {
@@ -102,10 +99,10 @@ export function getRoute() {
                 return (`No task with the ID of ${request.params.id}`)
             }
         }
-    })
+    },
 
     // PUT update a Task
-    server.route({
+    {
         method: 'PUT',
         path: '/task/{id}',
         handler:(request: Request) => {
@@ -122,5 +119,5 @@ export function getRoute() {
                 return (`No task with the ID of ${request.params.id}`)
             }
         }
-    })
-}
+    }
+]

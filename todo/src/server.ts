@@ -1,7 +1,8 @@
 'use strict';
 
 import { Server } from "@hapi/hapi";
-import { getRoute } from "./routes/routes";
+//import { getRoute } from "./routes/routes";
+import { getRoutes } from "./routes/routes";
 
 
 export let server: Server;
@@ -12,14 +13,13 @@ export const init = async () => {
         host: 'localhost'
     });
 
-    getRoute();
+    server.route(getRoutes);
 
     await server.start();
     console.log(`Running on ${server.info.uri}`);
 };
 
 process.on('unhandledRejection', (err) => {
-    console.log("ERROR ERRROR ERROR ");
     console.log(err);
     process.exit(1);
 });
