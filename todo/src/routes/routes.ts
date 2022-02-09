@@ -8,7 +8,7 @@ export function getRoute() {
     server.route({
         method: 'GET',
         path: '/task',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             return tasks;
         }
     });
@@ -17,7 +17,7 @@ export function getRoute() {
     server.route({
         method: 'GET',
         path: '/task/completed',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             const found = tasks.some(task => true === task.complete);
             if(found) {
                 return(tasks.filter(task => true === task.complete))
@@ -31,7 +31,7 @@ export function getRoute() {
     server.route({
         method: 'GET',
         path: '/task/incomplete',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             const found = tasks.some(task => false === task.complete);
             if(found) {
                 return(tasks.filter(task => false === task.complete))
@@ -45,7 +45,7 @@ export function getRoute() {
     server.route({
         method: 'GET',
         path: '/task/sorted',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: () => {
             var sortedTasks = tasks;
             sortedTasks.sort((task1, task2) => task1.id - task2.id);
            return sortedTasks;
@@ -56,7 +56,7 @@ export function getRoute() {
     server.route({
         method: 'GET',
         path: '/task/{id}',
-        handler:(request: Request, h: ResponseToolkit) => { 
+        handler:(request: Request) => { 
             console.log(request.params);
             console.log(request.params.id);
 
@@ -77,7 +77,7 @@ export function getRoute() {
     server.route({
         method: 'POST',
         path: '/task',
-        handler:(request: Request, h: ResponseToolkit) => {
+        handler:(request: Request) => {
             let newTodo = ({} as Task)
             newTodo = (request.payload as Task);
             tasks.push(newTodo);
@@ -89,14 +89,12 @@ export function getRoute() {
     server.route({
         method: 'DELETE',
         path: '/task/{id}',
-        handler: (request: Request, h: ResponseToolkit) => {
+        handler: (request: Request) => {
             const found = tasks.some(task => task.id === parseInt(request.params.id));
             if(found) {
-                tasks.forEach(task => {
+                tasks.map(task => {
                     if (task.id === parseInt(request.params.id)) {
-                        let i = parseInt(request.params.id)
-                        // console.log(tasks.splice[request.params.id]);
-                        tasks.splice(i-1, 1);
+                        tasks.splice(tasks.indexOf(task), 1);
                     }  
                 });
                 return(tasks.filter(task => task.id !== parseInt(request.params.id)));
@@ -110,7 +108,7 @@ export function getRoute() {
     server.route({
         method: 'PUT',
         path: '/task/{id}',
-        handler:(request: Request, h: ResponseToolkit) => {
+        handler:(request: Request) => {
 
             const found = tasks.find(task => task.id === parseInt(request.params.id));
             if(found) {
