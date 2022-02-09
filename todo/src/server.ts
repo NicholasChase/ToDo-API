@@ -1,7 +1,6 @@
 'use strict';
 
 import { Server } from "@hapi/hapi";
-//import { getRoute } from "./routes/routes";
 import { getRoutes } from "./routes/routes";
 
 
