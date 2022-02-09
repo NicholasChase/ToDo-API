@@ -1,9 +1,5 @@
-
-
 let dueDate1 = "02/02/2022";
 let newDate1 = new Date(dueDate1);
-// newDate1 = new Date(2019, 2, 4, 11, 30);
-// newDate1 = new Date("2019-08-02T11:30:00+10:00");
 
 
 let dueDate2 = "01/03/2022";
@@ -14,6 +10,12 @@ let newDate3 = new Date(dueDate3);
 
 let date: Date = new Date();
 
+export interface Task {
+    id: number;
+    todo: string;
+    dueDate: string;
+    complete: boolean;
+} 
 
 
 export const tasks = [

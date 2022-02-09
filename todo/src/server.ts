@@ -1,6 +1,6 @@
 'use strict';
 
-import { Server, ResponseToolkit } from "@hapi/hapi";
+import { Server } from "@hapi/hapi";
 import { getRoute } from "./routes/routes";
 
 
