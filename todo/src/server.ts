@@ -1,10 +1,11 @@
 'use strict';
 
 import { Server } from "@hapi/hapi";
-import { getRouting } from "./routes/getClass";
-import { delRouting } from "./routes/delClass";
-import { postRouting } from "./routes/postClass";
-import { putRouting } from "./routes/putClass";
+// import { getRouting } from "./routes/getClass";
+// import { delRouting } from "./routes/delClass";
+// import { postRouting } from "./routes/postClass";
+// import { putRouting } from "./routes/putClass";
+import { getRoutes } from "./routes/todoRoutes"
 
 export let server: Server;
 
@@ -14,15 +15,18 @@ export const init = async () => {
         host: 'localhost'
     });
 
-    var getRoute = new getRouting;
-    var delRoute = new delRouting;
-    var postRoute = new postRouting;
-    var putRoute = new putRouting;
+    // var getRoute = new getRouting;
+    // var delRoute = new delRouting;
+    // var postRoute = new postRouting;
+    // var putRoute = new putRouting;
 
-    getRoute.getClassRoute();
-    delRoute.delClassRoute();
-    postRoute.postClassRoute();
-    putRoute.putClassRoute();
+    // getRoute.getClassRoute();
+    // delRoute.delClassRoute();
+    // postRoute.postClassRoute();
+    // putRoute.putClassRoute();
+
+    
+    server.route(getRoutes);
 
     await server.start();
     console.log(`Running on ${server.info.uri}`);
