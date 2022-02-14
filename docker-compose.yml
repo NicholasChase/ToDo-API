@@ -19,7 +19,7 @@ services:
     networks:
       - local
 
-volumes: "./docker/db/scripts:/killLifecycle.sh"
+volumes:
     data-volume:
 
 networks:
