@@ -58,16 +58,12 @@ class TodoRepo implements reposotoryPattern<Task> {
 
     // Update PUT
     public updateTodo(uuid, payload) {
-        const updateTodo = this.task.filter(tasks => tasks.uuid == uuid);
+        const updateTodo = this.task.filter(tasks => tasks.uuid == uuid)[0]
+        
+        updateTodo.todo = payload['todo'];
+        updateTodo.dueDate = payload['dueDate'];
+        updateTodo.complete = payload['completed'];
 
-        if(updateTodo.length === 0) {
-            return `${uuid} does not exist`;
-        }
-        updateTodo.forEach(tasks => {
-                tasks.todo = payload['todo'];
-                tasks.dueDate = payload['dueDate'];
-                tasks.complete = payload['completed'];
-        }) 
         return updateTodo
     }
 
