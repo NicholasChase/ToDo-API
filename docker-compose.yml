@@ -11,7 +11,7 @@ services:
     volumes:
       - ./docker/db/scripts:/docker-entrypoint-initdb.d
       - ./docker/db/mysql_data:/var/lib/mysql
-      # - ./docker/db/scripts:/killLifecycle.sh
+      - ./docker/db/scripts:/killLifecycle.sh
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
