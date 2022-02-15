@@ -84,7 +84,6 @@ class TodoRepo implements reposotoryPattern<Task> {
         let sortedTasks = this.task.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
         return sortedTasks
     }
-
 }
 
 export const repo = new TodoRepo();
