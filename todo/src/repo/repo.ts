@@ -29,11 +29,7 @@ class TodoRepo implements reposotoryPattern<Task> {
     // GET a single task
     public find(uuid) {
         const found = this.task.filter(tasks => tasks.uuid == uuid)
-        if(found) {
-            return(found);
-        } else {
-            return (`No task with the ID of ${uuid}`)
-        } 
+        return found[0];
     }
 
     // DEL
@@ -67,12 +63,10 @@ class TodoRepo implements reposotoryPattern<Task> {
         if(updateTodo.length === 0) {
             return `${uuid} does not exist`;
         }
-        this.task.forEach(tasks => {
-            if (tasks.uuid == uuid) {
+        updateTodo.forEach(tasks => {
                 tasks.todo = payload['todo'];
                 tasks.dueDate = payload['dueDate'];
                 tasks.complete = payload['completed'];
-            }
         }) 
         return updateTodo
     }
@@ -80,22 +74,13 @@ class TodoRepo implements reposotoryPattern<Task> {
     // GET incomplete status
     public incompleteTodos() {
         const incompleteTodos = this.task.filter(task => false === task.complete);
-        if(incompleteTodos) {
-            return(incompleteTodos);
-        } else {
-            return (`No todo is completed`);
-        }
+        return incompleteTodos;
     }
 
     // GET complete status
     public completeTodos() {
-        // const found = this.task.some(task => true === task.complete);
         const completedTodo = this.task.filter(task => true === task.complete)
-        if(completedTodo) {
-            return(completedTodo)
-        } else {
-            return (`No todo is completed`);
-        }
+        return completedTodo;
     }
 
     // GET order the todos by date
