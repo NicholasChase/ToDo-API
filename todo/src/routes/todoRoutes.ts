@@ -2,29 +2,63 @@ import { Request } from "@hapi/hapi"
 import { Task } from "../todo";
 import { repo } from "../repo/repo";
 import { v4 as uuidv4 } from 'uuid';
-import { stringToDate } from "../Helpers/helpers"
-
+import { stringToDate } from "../Helpers/helpers";
+const seq = require('hapi-sequelizejs');
 
 export const getRoutes = [
 
-     // GET all Tasks
-     {
+    // GET all todos from DB
+    {
         method: 'GET',
         path: '/task',
         handler: () => {
-            return repo.findAll();
+            return repo.findAll()
         }
+
     },
 
+    // GET a single todo from DB
     {
         method: 'GET',
         path: '/task/{uuid}',
         handler: (request: Request) => {
-            let uuid = request.params.uuid
-            return repo.find(uuid)
+            return repo.find(request.params.uuid)
         }
     },
 
+    // GET all incomplete todo from DB
+    {
+        method: 'GET',
+        path: '/task/incomplete',
+        handler: () => {
+            return repo.incompleteTodos();
+        }
+
+    },
+
+
+    // GET all complete todo from DB
+    {
+        method: 'GET',
+        path: '/task/complete',
+        handler: () => {
+            return repo.completeTodos();
+        }
+
+    },
+
+    // PUT from DB
+    {
+        method: 'PUT',
+        path: '/task/{uuid}',
+        handler: (request: Request) => {
+            let uuid = request.params.uuid;
+            return repo.updateTodo(uuid, request.payload);
+        }
+    },
+
+
+    // POST to the DB
     {
         method: 'POST',
         path: '/task',
@@ -32,63 +66,22 @@ export const getRoutes = [
             let newTodo = ({} as Task)
             let dueDate = stringToDate(request.payload['dueDate']);
             let date: Date = new Date();
-
+        
             newTodo.uuid = uuidv4();
             newTodo.todo = request.payload["todo"];
             newTodo.createdDate = date;
             newTodo.dueDate = dueDate;
             newTodo.complete = request.payload["completed"];
-            
             return repo.create(newTodo);
         }
-
     },
 
-     // DEL a task
-     {
+    // DEL from the DB
+    {
         method: 'DELETE',
         path: '/task/{uuid}',
         handler: (request: Request) => {
-            let uuid = request.params.uuid;
-            return repo.del(uuid);
-        },
-     },
-
-     // Update a Task
-     {
-        method: 'PUT',
-        path: '/task/{uuid}',
-        handler: (request: Request) => {
-            let uuid = request.params.uuid;
-            return repo.updateTodo(uuid, request.payload);
-        },
-     },
-
-    // Only grab the tasks that have a completed status of false
-    {
-        method: 'GET',
-        path: '/task/incomplete',
-        handler: () => {
-            return repo.incompleteTodos();
+            return repo.del(request.params.uuid);
         }
     },
-
-    // Only grab the tasks that have a complete status of true
-    {
-        method: 'GET',
-        path: '/task/complete',
-        handler: () => {
-            return repo.completeTodos();
-        }
-    },
-
-    // Sorting the Dates
-    {
-    method: 'GET',
-    path: '/task/dateSorted',
-    handler: () => {
-        return repo.orderDates();
-        }
-    },
-
 ]

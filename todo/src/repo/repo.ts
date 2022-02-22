@@ -1,88 +1,53 @@
 import { Task } from "../todo";
+import { findAll, updateTodo, create, del, find, incompleteTodos, completeTodos } from "./sequelize";
 
 interface reposotoryPattern<T> {
-    find(findTodo: String),
     findAll(),
-    create(makeATodo: T), 
-    del(delTask: String),
-    updateTodo(updateTask: String, payload: T),
+    find(uuid: String),
     incompleteTodos(),
     completeTodos(),
-    orderDates(),
+    updateTodo( uuid: String, payload: String),
+    create(newTodo: T),
+    del(uuid: String),
 }
 
 class TodoRepo implements reposotoryPattern<Task> {
 
     private task: Task[] = [];
 
-    // GET all tasks
+    // GET ALL TODOS
     public findAll() {
-        return this.task
+        return findAll();
     }
 
-    // POST
-    public create(newTask) {
-        this.task.push(newTask);
-        return newTask
-    }
-
-    // GET a single task
+    //GET a single Todo from DB
     public find(uuid) {
-        const found = this.task.filter(tasks => tasks.uuid == uuid)
-        return found[0];
+        return find(uuid);
     }
 
-    // DEL
-    public del(uuid) {
-        //Find element by uuid
-        const result = this.task.filter(tasks => tasks.uuid == uuid);
-        
-        if(result.length === 0) {
-            return `${uuid} does not exist`
-        }
-
-        const element = result[0]
-
-        // find index of uuid
-        const index = this.task.indexOf(element)
-
-        if (index < 0) {
-            return
-        }
-
-        // splice the array at the indexOf
-        this.task.splice(index, 1);
-        return this.task
-
-    }
-
-    // Update PUT
-    public updateTodo(uuid, payload) {
-        const updateTodo = this.task.filter(tasks => tasks.uuid == uuid)[0]
-        
-        updateTodo.todo = payload['todo'];
-        updateTodo.dueDate = payload['dueDate'];
-        updateTodo.complete = payload['completed'];
-
-        return updateTodo
-    }
-
-    // GET incomplete status
+    // GET allincomplete todos
     public incompleteTodos() {
-        const incompleteTodos = this.task.filter(task => false === task.complete);
-        return incompleteTodos;
+        return incompleteTodos();
     }
 
-    // GET complete status
+    // GET all completed todos
     public completeTodos() {
-        const completedTodo = this.task.filter(task => true === task.complete)
-        return completedTodo;
+        return completeTodos();
     }
 
-    // GET order the todos by date
-    public orderDates() {
-        let sortedTasks = this.task.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-        return sortedTasks
+    // PUT Update a DB
+    public updateTodo(uuid, payload) {
+        return updateTodo(uuid, payload );
+    }
+
+    // POST to the DB
+    public create(newTodo) {
+        return create(newTodo);
+    }
+
+    //DEL from the database
+    public del(uuid) {
+        return del(uuid);
     }
 }
 
