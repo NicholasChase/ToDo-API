@@ -31,7 +31,8 @@ export const getRoutes = [
         method: 'GET',
         path: '/task/incomplete',
         handler: () => {
-            return repo.incompleteTodos();
+            let complete = false;
+            return repo.completedTodos(complete);
         }
 
     },
@@ -42,7 +43,8 @@ export const getRoutes = [
         method: 'GET',
         path: '/task/complete',
         handler: () => {
-            return repo.completeTodos();
+            let complete = true;
+            return repo.completedTodos(complete);
         }
 
     },
@@ -63,16 +65,22 @@ export const getRoutes = [
         method: 'POST',
         path: '/task',
         handler: (request: Request) => {
-            let newTodo = ({} as Task)
-            let dueDate = stringToDate(request.payload['dueDate']);
-            let date: Date = new Date();
+            // let newTodo = ({} as Task)
+            // let dueDate = stringToDate(request.payload['dueDate']);
+            // let date: Date = new Date();
         
-            newTodo.uuid = uuidv4();
-            newTodo.todo = request.payload["todo"];
-            newTodo.createdDate = date;
-            newTodo.dueDate = dueDate;
-            newTodo.complete = request.payload["completed"];
-            return repo.create(newTodo);
+            // newTodo.uuid = uuidv4();
+            // newTodo.todo = request.payload["todo"];
+            // newTodo.createdDate = date;
+            // newTodo.dueDate = dueDate;
+            // newTodo.complete = request.payload["completed"];
+            // return repo.create(newTodo);
+            
+            // let dueDate = stringToDate(request.payload['dueDate']);
+            // let date: Date = new Date();
+        
+
+            return repo.create(request.payload);
         }
     },
 

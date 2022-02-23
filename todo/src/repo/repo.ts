@@ -1,20 +1,21 @@
 import { Task } from "../todo";
+import { v4 as uuidv4 } from 'uuid';
+import { stringToDate } from "../Helpers/helpers";
 
 const instances = require('hapi-sequelizejs').instances;
 
 interface reposotoryPattern<T> {
     findAll(),
     find(uuid: String),
-    incompleteTodos(),
-    completeTodos(),
+    // incompleteTodos(),
+    // completeTodos(),
+    completedTodos(completed: Boolean)
     updateTodo( uuid: String, payload: T),
-    create(newTodo: T),
+    create(payload: T),
     del(uuid: String),
 }
 
 class TodoRepo implements reposotoryPattern<Task> {
-
-    private task: Task[] = [];
 
     // GET ALL TODOS
     public async findAll() {
@@ -31,20 +32,24 @@ class TodoRepo implements reposotoryPattern<Task> {
         return result;
     }
 
-    // GET all incomplete todos
-    public async incompleteTodos() {
-        const[result] = await instances.dbs.mysql.sequelize.query
-        (`SELECT * FROM todo 
-        WHERE todo_completed = 0`);
-        return result;
-    }
 
-    // GET all completed todos
-    public async completeTodos() {
-        const [result] = await instances.dbs.mysql.sequelize.query
-        (`SELECT * FROM todo 
-        WHERE todo_completed = 1`);
-        return result;
+    // GET all complete and incomplete tasks
+    public async completedTodos(complete) {
+        if (complete == true) {
+            const [result] = await instances.dbs.mysql.sequelize.query
+            (`SELECT * FROM todo WHERE todo_completed = :completed`,
+            {
+                replacements: { completed: `1` } 
+            });
+            return result;
+        } else {
+            const [result] = await instances.dbs.mysql.sequelize.query
+            (`SELECT * FROM todo WHERE todo_completed = :completed`,
+            {
+                replacements: { completed: `0` } 
+            });
+            return result;
+        }
     }
 
     // PUT Update a DB
@@ -61,15 +66,19 @@ class TodoRepo implements reposotoryPattern<Task> {
     }
 
     // POST to the DB
-    public async create(newTodo) {
+    public async create(payload) {
+        let dueDate = stringToDate(payload['dueDate']);
+        let date: Date = new Date();
+
+
         await instances.dbs.mysql.sequelize.query
         (`INSERT INTO todo 
         VALUES
-        ("${newTodo.uuid}", 
-        "${newTodo.todo}", 
-        "${newTodo.createdDate}",
-        "${newTodo.dueDate}",
-        ${newTodo.complete})`);
+        ("${uuidv4()}", 
+        "${payload['todo']}", 
+        "${date}",
+        "${dueDate}",
+        ${payload['completed']})`);
         const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
         return await result
     }
