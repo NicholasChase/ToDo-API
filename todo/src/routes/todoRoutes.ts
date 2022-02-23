@@ -1,9 +1,5 @@
 import { Request } from "@hapi/hapi"
-import { Task } from "../todo";
 import { repo } from "../repo/repo";
-import { v4 as uuidv4 } from 'uuid';
-import { stringToDate } from "../Helpers/helpers";
-const seq = require('hapi-sequelizejs');
 
 export const getRoutes = [
 
@@ -65,21 +61,6 @@ export const getRoutes = [
         method: 'POST',
         path: '/task',
         handler: (request: Request) => {
-            // let newTodo = ({} as Task)
-            // let dueDate = stringToDate(request.payload['dueDate']);
-            // let date: Date = new Date();
-        
-            // newTodo.uuid = uuidv4();
-            // newTodo.todo = request.payload["todo"];
-            // newTodo.createdDate = date;
-            // newTodo.dueDate = dueDate;
-            // newTodo.complete = request.payload["completed"];
-            // return repo.create(newTodo);
-            
-            // let dueDate = stringToDate(request.payload['dueDate']);
-            // let date: Date = new Date();
-        
-
             return repo.create(request.payload);
         }
     },
