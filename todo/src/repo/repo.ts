@@ -1,90 +1,111 @@
 import { Task } from "../todo";
+import { v4 as uuidv4 } from 'uuid';
+import { stringToDate } from "../Helpers/helpers";
+
+const instances = require('hapi-sequelizejs').instances;
 
 interface reposotoryPattern<T> {
-    find(findTodo: String),
     findAll(),
-    create(makeATodo: T), 
-    del(delTask: String),
-    updateTodo(updateTask: String, payload: T),
-    incompleteTodos(),
-    completeTodos(),
-    orderDates(),
+    find(uuid: String),
+    completedTodos(completed: Boolean)
+    updateTodo( uuid: String, payload: T),
+    create(payload: T),
+    del(uuid: String),
 }
 
 class TodoRepo implements reposotoryPattern<Task> {
 
-    private task: Task[] = [];
-
-    // GET all tasks
-    public findAll() {
-        return this.task
+    // GET ALL TODOS
+    public async findAll() {
+        const [results] = await instances.dbs.mysql.sequelize.query
+        (`SELECT * FROM todo`);
+        return results
     }
 
-    // POST
-    public create(newTask) {
-        this.task.push(newTask);
-        return newTask
+    //GET a single Todo from DB
+    public async find(uuid) {
+        const [result] = await instances.dbs.mysql.sequelize.query
+        (`SELECT * FROM todo 
+        WHERE todo_uuid = ?`, 
+        {
+            replacements: [uuid]
+        });
+        return result;
     }
 
-    // GET a single task
-    public find(uuid) {
-        const found = this.task.filter(tasks => tasks.uuid == uuid)
-        return found[0];
-    }
 
-    // DEL
-    public del(uuid) {
-        //Find element by uuid
-        const result = this.task.filter(tasks => tasks.uuid == uuid);
-        
-        if(result.length === 0) {
-            return `${uuid} does not exist`
+    // GET all complete and incomplete tasks
+    public async completedTodos(complete) {
+        if (complete == true) {
+            const [result] = await instances.dbs.mysql.sequelize.query
+            (`SELECT * FROM todo WHERE todo_completed = :completed`,
+            {
+                replacements: { completed: `1` } 
+            });
+            return result;
+        } else {
+            const [result] = await instances.dbs.mysql.sequelize.query
+            (`SELECT * FROM todo WHERE todo_completed = :completed`,
+            {
+                replacements: { completed: `0` } 
+            });
+            return result;
         }
-
-        const element = result[0]
-
-        // find index of uuid
-        const index = this.task.indexOf(element)
-
-        if (index < 0) {
-            return
-        }
-
-        // splice the array at the indexOf
-        this.task.splice(index, 1);
-        return this.task
-
     }
 
-    // Update PUT
-    public updateTodo(uuid, payload) {
-        const updateTodo = this.task.filter(tasks => tasks.uuid == uuid)[0]
-        
-        updateTodo.todo = payload['todo'];
-        updateTodo.dueDate = payload['dueDate'];
-        updateTodo.complete = payload['completed'];
-
-        return updateTodo
+    // PUT Update a DB
+    public async updateTodo(uuid, payload) {
+        var date = new Date(payload['dueDate']);
+        const todo = payload['todo'];
+        const complete = payload['completed'];
+        await instances.dbs.mysql.sequelize.query
+        (`UPDATE todo 
+        SET todo_todo = ?,
+        todo_dueDate = ?,
+        todo_completed = ?
+        WHERE todo_uuid = ?`,
+        {
+            replacements: [payload['todo'],date, payload['completed'],uuid]
+        });
+        const [updatedTodo] = await instances.dbs.mysql.sequelize.query(`SELECT * FROM todo WHERE todo_uuid = ?`,
+        {
+            replacements: [uuid]
+        });
+        return updatedTodo;
     }
 
-    // GET incomplete status
-    public incompleteTodos() {
-        const incompleteTodos = this.task.filter(task => false === task.complete);
-        return incompleteTodos;
+    // POST to the DB
+    public async create(payload) {
+        let dueDate = stringToDate(payload['dueDate']);
+        let date: Date = new Date();
+
+
+        await instances.dbs.mysql.sequelize.query
+        (`INSERT INTO todo 
+        VALUES
+        (?, 
+        ?, 
+        ?,
+        ?,
+        ?)`,
+        {
+            replacements: [uuidv4(),payload['todo'],date,dueDate,payload['completed']]
+        });
+        const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
+        return await result
     }
 
-    // GET complete status
-    public completeTodos() {
-        const completedTodo = this.task.filter(task => true === task.complete)
-        return completedTodo;
+    //DEL from the database
+    public async del(uuid) {
+        await instances.dbs.mysql.sequelize.query
+        (`DELETE FROM todo 
+        WHERE todo_uuid=?`, 
+        {
+            replacements: [uuid]
+        });
+        const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
+        return result
     }
-
-    // GET order the todos by date
-    public orderDates() {
-        let sortedTasks = this.task.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-        return sortedTasks
-    }
-
 }
 
 export const repo = new TodoRepo();

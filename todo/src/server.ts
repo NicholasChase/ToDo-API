@@ -1,11 +1,8 @@
 'use strict';
 
 import { Server } from "@hapi/hapi";
-// import { getRouting } from "./routes/getClass";
-// import { delRouting } from "./routes/delClass";
-// import { postRouting } from "./routes/postClass";
-// import { putRouting } from "./routes/putClass";
-import { getRoutes } from "./routes/todoRoutes"
+import { getRoutes } from "./routes/todoRoutes";
+const Sequelize = require('sequelize')
 
 export let server: Server;
 
@@ -15,17 +12,23 @@ export const init = async () => {
         host: 'localhost'
     });
 
-    // var getRoute = new getRouting;
-    // var delRoute = new delRouting;
-    // var postRoute = new postRouting;
-    // var putRoute = new putRouting;
+    //Registering the hapi-sequelizejs plugin
+    await server.register([
+        {
+            plugin: require('hapi-sequelizejs'),
+            options: [
+                {
+                    name: 'mysql', // identifier
+                    sequelize: new Sequelize('mysql', 'root', 'P@ssw0rd!', {
+                        host: 'localhost',
+                        port: 3306,
+                        dialect: 'mysql'
+                    }),
+                },
+            ],
+        },
+    ]);
 
-    // getRoute.getClassRoute();
-    // delRoute.delClassRoute();
-    // postRoute.postClassRoute();
-    // putRoute.putClassRoute();
-
-    
     server.route(getRoutes);
 
     await server.start();
@@ -36,5 +39,3 @@ process.on('unhandledRejection', (err) => {
     console.log(err);
     process.exit(1);
 });
-
-
