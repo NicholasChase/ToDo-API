@@ -7,8 +7,6 @@ const instances = require('hapi-sequelizejs').instances;
 interface reposotoryPattern<T> {
     findAll(),
     find(uuid: String),
-    // incompleteTodos(),
-    // completeTodos(),
     completedTodos(completed: Boolean)
     updateTodo( uuid: String, payload: T),
     create(payload: T),
@@ -28,7 +26,10 @@ class TodoRepo implements reposotoryPattern<Task> {
     public async find(uuid) {
         const [result] = await instances.dbs.mysql.sequelize.query
         (`SELECT * FROM todo 
-        WHERE todo_uuid = '${uuid}'`);
+        WHERE todo_uuid = ?`, 
+        {
+            replacements: [uuid]
+        });
         return result;
     }
 
@@ -55,13 +56,21 @@ class TodoRepo implements reposotoryPattern<Task> {
     // PUT Update a DB
     public async updateTodo(uuid, payload) {
         var date = new Date(payload['dueDate']);
+        const todo = payload['todo'];
+        const complete = payload['completed'];
         await instances.dbs.mysql.sequelize.query
         (`UPDATE todo 
-        SET todo_todo = '${payload['todo']}',
-        todo_dueDate = '${date}',
-        todo_completed = ${payload['completed']}
-        WHERE todo_uuid = "${uuid}"`);
-        const [updatedTodo] = await instances.dbs.mysql.sequelize.query(`SELECT * FROM todo WHERE todo_uuid = "${uuid}"`);
+        SET todo_todo = ?,
+        todo_dueDate = ?,
+        todo_completed = ?
+        WHERE todo_uuid = ?`,
+        {
+            replacements: [payload['todo'],date, payload['completed'],uuid]
+        });
+        const [updatedTodo] = await instances.dbs.mysql.sequelize.query(`SELECT * FROM todo WHERE todo_uuid = ?`,
+        {
+            replacements: [uuid]
+        });
         return updatedTodo;
     }
 
@@ -74,11 +83,14 @@ class TodoRepo implements reposotoryPattern<Task> {
         await instances.dbs.mysql.sequelize.query
         (`INSERT INTO todo 
         VALUES
-        ("${uuidv4()}", 
-        "${payload['todo']}", 
-        "${date}",
-        "${dueDate}",
-        ${payload['completed']})`);
+        (?, 
+        ?, 
+        ?,
+        ?,
+        ?)`,
+        {
+            replacements: [uuidv4(),payload['todo'],date,dueDate,payload['completed']]
+        });
         const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
         return await result
     }
@@ -87,7 +99,10 @@ class TodoRepo implements reposotoryPattern<Task> {
     public async del(uuid) {
         await instances.dbs.mysql.sequelize.query
         (`DELETE FROM todo 
-        WHERE todo_uuid='${uuid}'`);
+        WHERE todo_uuid=?`, 
+        {
+            replacements: [uuid]
+        });
         const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
         return result
     }
