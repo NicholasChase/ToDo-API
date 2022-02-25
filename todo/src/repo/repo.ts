@@ -2,7 +2,8 @@ import { Task } from "../todo";
 import { v4 as uuidv4 } from 'uuid';
 import { stringToDate } from "../Helpers/helpers";
 
-const instances = require('hapi-sequelizejs').instances;
+// const instances = require('hapi-sequelizejs').instances;
+const todos = require('../Models/modelsTodo')
 
 interface reposotoryPattern<T> {
     findAll(),
@@ -17,94 +18,92 @@ class TodoRepo implements reposotoryPattern<Task> {
 
     // GET ALL TODOS
     public async findAll() {
-        const [results] = await instances.dbs.mysql.sequelize.query
-        (`SELECT * FROM todo`);
-        return results
+        const mod = todos.modelTodo()
+        console.log(mod)
+        const everyTodo = await mod.findAll();
+        return everyTodo
     }
 
     //GET a single Todo from DB
     public async find(uuid) {
-        const [result] = await instances.dbs.mysql.sequelize.query
-        (`SELECT * FROM todo 
-        WHERE todo_uuid = ?`, 
-        {
-            replacements: [uuid]
-        });
-        return result;
+        const models = todos.modelTodo();
+        const singleTodo = models.findAll({
+            where: {
+                uuid: uuid
+            }
+        })
+        return singleTodo
     }
-
 
     // GET all complete and incomplete tasks
     public async completedTodos(complete) {
+        const models = todos.modelTodo();
         if (complete == true) {
-            const [result] = await instances.dbs.mysql.sequelize.query
-            (`SELECT * FROM todo WHERE todo_completed = :completed`,
-            {
-                replacements: { completed: `1` } 
-            });
-            return result;
+           const result = models.findAll({
+               where: {
+                   completed: complete
+               }
+           })
+           return result;
         } else {
-            const [result] = await instances.dbs.mysql.sequelize.query
-            (`SELECT * FROM todo WHERE todo_completed = :completed`,
-            {
-                replacements: { completed: `0` } 
-            });
+            const result = models.findAll({
+                where: {
+                    completed: complete
+                }
+            })
             return result;
         }
-    }
+}
 
     // PUT Update a DB
     public async updateTodo(uuid, payload) {
-        var date = new Date(payload['dueDate']);
-        const todo = payload['todo'];
-        const complete = payload['completed'];
-        await instances.dbs.mysql.sequelize.query
-        (`UPDATE todo 
-        SET todo_todo = ?,
-        todo_dueDate = ?,
-        todo_completed = ?
-        WHERE todo_uuid = ?`,
-        {
-            replacements: [payload['todo'],date, payload['completed'],uuid]
+        const models = todos.modelTodo();
+        await models.update({
+            todo: payload['todo'],
+            dueDate: stringToDate(payload['dueDate']),
+            completed: payload['completed']
+        }, {
+            where: {
+                uuid: uuid
+            }
         });
-        const [updatedTodo] = await instances.dbs.mysql.sequelize.query(`SELECT * FROM todo WHERE todo_uuid = ?`,
-        {
-            replacements: [uuid]
+        const updatedTodo = models.findAll({
+            where: {
+                uuid: uuid
+            }
         });
         return updatedTodo;
     }
 
     // POST to the DB
     public async create(payload) {
+
         let dueDate = stringToDate(payload['dueDate']);
         let date: Date = new Date();
 
-
-        await instances.dbs.mysql.sequelize.query
-        (`INSERT INTO todo 
-        VALUES
-        (?, 
-        ?, 
-        ?,
-        ?,
-        ?)`,
-        {
-            replacements: [uuidv4(),payload['todo'],date,dueDate,payload['completed']]
+        const models = todos.modelTodo();
+        const newTodo = await models.create({ 
+            uuid: uuidv4(),
+            todo: payload['todo'],
+            createdDate: date,
+            dueDate: dueDate,
+            completed: payload['completed'],
         });
-        const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
-        return await result
+        console.log(newTodo)
+        
+        const everyTodo = await models.findAll();
+        return everyTodo;
     }
 
     //DEL from the database
     public async del(uuid) {
-        await instances.dbs.mysql.sequelize.query
-        (`DELETE FROM todo 
-        WHERE todo_uuid=?`, 
-        {
-            replacements: [uuid]
+        const models = todos.modelTodo();
+        await models.destroy({
+            where: {
+                uuid: uuid
+            }
         });
-        const [result] = await instances.dbs.mysql.sequelize.query('SELECT * FROM todo');
-        return result
+        return await models.findAll();
     }
 }
 
