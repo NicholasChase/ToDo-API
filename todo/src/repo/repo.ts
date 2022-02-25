@@ -35,21 +35,13 @@ class TodoRepo implements reposotoryPattern<Task> {
     // GET all complete and incomplete tasks
     public async completedTodos(complete) {
         const models = todos.modelTodo();
-        if (complete == true) {
-           const result = models.findAll({
-               where: {
-                   completed: complete
-               }
-           })
-           return result;
-        } else {
-            const result = models.findAll({
-                where: {
-                    completed: complete
-                }
-            })
-            return result;
-        }
+        
+        const result = models.findAll({
+            where: {
+                completed: complete
+            }
+        })
+         return result
 }
 
     // PUT Update a DB
