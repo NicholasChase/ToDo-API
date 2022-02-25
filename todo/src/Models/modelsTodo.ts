@@ -33,8 +33,5 @@ module.exports.modelTodo = function  () {
     },
 );
 
-instances.dbs.mysql.sequelize.sync();
-console.log("All models were synchronized successfully.");
-
 return todo
 }

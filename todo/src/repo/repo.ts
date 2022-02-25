@@ -1,8 +1,6 @@
 import { Task } from "../todo";
 import { v4 as uuidv4 } from 'uuid';
 import { stringToDate } from "../Helpers/helpers";
-
-// const instances = require('hapi-sequelizejs').instances;
 const todos = require('../Models/modelsTodo')
 
 interface reposotoryPattern<T> {
@@ -19,7 +17,6 @@ class TodoRepo implements reposotoryPattern<Task> {
     // GET ALL TODOS
     public async findAll() {
         const mod = todos.modelTodo()
-        console.log(mod)
         const everyTodo = await mod.findAll();
         return everyTodo
     }
@@ -89,7 +86,6 @@ class TodoRepo implements reposotoryPattern<Task> {
             dueDate: dueDate,
             completed: payload['completed'],
         });
-        console.log(newTodo)
         
         const everyTodo = await models.findAll();
         return everyTodo;

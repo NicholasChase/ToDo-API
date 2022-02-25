@@ -25,7 +25,6 @@ export const init = async () => {
                         port: 3306,
                         dialect: 'mysql'
                     }),
-                    sync: true,
                 },
             ],
         },
