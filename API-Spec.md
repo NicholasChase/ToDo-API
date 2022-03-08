@@ -8,27 +8,27 @@ This is a blueprint of the ToDo API. The API showcases POST, GET, PUT, DEL
 ### Create ToDo's [POST]
 Create a Todo
 
-POST: `/todos`
+POST: `/task`
 
 Request Body:
 ```json
 {
-    "name": "String",
+    "todo": "String",
     "dueDate": "Date",
-    "complete": bool,
+    "completed": bool,
 }
 ```
-Response Code: `201 CREATED`
+Response Code: `200 OK`
 
 Response Body:
 
 ```json
 {   
-    "id": "GUID",
-    "name": "String",
+    "uuid": "GUID",
+    "todo": "String",
     "createdDate": "DateTime",
     "dueDate": "Date",
-    "complete": bool,
+    "completed": bool,
 }
 ```
 
@@ -39,8 +39,8 @@ Response Code: `400 Bad Request`
 
 ```json
 {
-    "name": "String",
-    "complete": Bool
+    "todo": "String",
+    "completed": Bool
 }
 ```
 
@@ -57,7 +57,7 @@ Response Code: `400 Bad Request`
 ### Fetch all ToDo's [GET]
 Get every ToDo
 
-GET: `/todos`
+GET: `/task`
 
 Response Code: `200 OK`
 
@@ -66,18 +66,18 @@ Response Body:
 ```json
 [
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     ...
 ]
@@ -111,18 +111,18 @@ Response Body:
 ```json 
 [
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     ...
 ]
@@ -145,12 +145,9 @@ Response Code: `400 Bad Request`
 ### Filter By Completed And Sort By Due Date [GET]
 Grab the Todo's that are completed
 
-GET: `/todos`
+GET: `/task/complete`
 
-parameters:
-    complete: True
-    sortBy: Dates
-    order: ascending
+
 
 Response Code: `200 OK`
 
@@ -159,18 +156,18 @@ Response Body:
 ```json
 [
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     ...
 ]
@@ -193,7 +190,7 @@ Response Code: `400 Bad Request`
 ### Filter By Incomplete and Sort By Due Date [GET]
 Grab the Todo's that are incomplete
 
-GET: `/todos`
+GET: `/task/incomplete`
 
 parameters:
     complete: False
@@ -207,18 +204,18 @@ Response Body:
 ```json
 [
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     {
-        "id": "GUID",
-        "name": "String",
+        "uuid": "GUID",
+        "todo": "String",
         "createdDate": "DateTime",
         "dueDate": "Date",
-        "complete": bool,
+        "completed": bool,
     },
     ...
 ]
@@ -241,20 +238,22 @@ Response Code: `400 Bad Request`
 ### Fetch a ToDo [GET]
 Get a single ToDo
 
-GET: `todos/{id}`
+GET: `task/{id}`
 
 Response Code: `200 OK`
 
 Response Body:
 
 ```json
-{
-    "id": "GUID",
-    "name": "String",
-    "createdDate": "DateTime",
-    "dueDate": "Date",
-    "complete": bool,
-}
+[
+    {
+        "uuid": "GUID",
+        "todo": "String",
+        "createdDate": "DateTime",
+        "dueDate": "Date",
+        "completed": bool,
+    }
+]
 ```
 
 Fail State
@@ -272,15 +271,19 @@ Response Code: `400 Bad Request
 ### Update a ToDo [PUT]
 Update an existing ToDo
 
-PUT: `todos/{id}`
+PUT: `task/{id}`
 
 Request Body:
 ```json
-{
-    "name": "String",
-    "dueDate": "Date",
-    "complete": bool,
-}
+[
+    {
+        "uuid": UUID
+        "todo": "String",
+        "createdDate": "Date"
+        "dueDate": "Date",
+        "completed": bool,
+    }
+]
 ```
 
 Response Body:
@@ -289,11 +292,11 @@ Response Code: `200 OK`
 
 ```json
 {
-    "id": "GUID",
-    "name": "String",
+    "uuid": "GUID",
+    "todo": "String",
     "createdDate": "DateTime",
     "dueDate": "Date",
-    "complete": bool,
+    "completed": bool,
 }
 ```
 
@@ -315,7 +318,7 @@ Response Code: `400 Bad Request`
 ### Delete a ToDo [DEL]
 Delete an existing ToDo
 
-DEL: `todos/{id}`
+DEL: `task/{id}`
 
 Response Code: `200 OK`
 
