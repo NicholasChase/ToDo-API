@@ -189,7 +189,7 @@ Delete an existing ToDo
 DEL: `task/{id}`
 
 Response Code: `200 OK`
-
+```json
 [
     {
         "uuid": "GUID",
@@ -200,4 +200,5 @@ Response Code: `200 OK`
     } ...
 
 ]
+```
 
